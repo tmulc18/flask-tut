@@ -9,6 +9,7 @@ from flask_login import login_required
 from app.models import User
 from app import db
 from app.forms import RegistrationForm
+from app.forms import EditProfileForm
 
 
 @app.before_request
@@ -80,12 +81,10 @@ def user(username):
     ]
     return render_template('user.html', user=user, posts=posts)
 
-from app.forms import EditProfileForm
-
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
